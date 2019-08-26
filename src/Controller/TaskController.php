@@ -36,7 +36,7 @@ class TaskController extends AbstractController
         $taskList = $em->getRepository(Task::class)->findBy(
             array('user_id'  => $user_id)
         );
-        $data = $this->get('serializer')->serialize($taskList, 'json');
+        $data = $this->get('jms_serializer')->serialize($taskList, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -51,7 +51,7 @@ class TaskController extends AbstractController
     public function details($id, Request $request, EntityManagerInterface $em)
     {
         $task = $em->getRepository(Task::class)->findOneById($id);
-        $data = $this->get('serializer')->serialize($task, 'json');
+        $data = $this->get('jms_serializer')->serialize($task, 'json');
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
