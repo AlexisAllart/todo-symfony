@@ -67,7 +67,7 @@ class User
     /**
      * @var \DateTime
      * 
-     * @ORM\Column(type="datetime)
+     * @ORM\Column(type="datetime")
      */
     private $updatedAt;
 
