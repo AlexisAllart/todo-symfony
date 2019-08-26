@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class TaskController extends Controller
 {
     /**
-     * @Route("/task/create", name="task.create", methods={"POST")
+     * @Route("/task/create", name="task.create", methods="POST")
      * 
      * @param Request $request
      * @param EntityManagerInterface $em
@@ -53,7 +53,7 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("task/delete/{id}, name="task.delete", methods="DELETE", requirements={"id" = "\d+"})
+     * @Route("task/delete/{id}", name="task.delete", methods="DELETE", requirements={"id" = "\d+"})
      * 
      * @param Request $request
      * @param EntityManagerInterface $em
@@ -66,7 +66,7 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("task/search/{title}, name="task.search", methods="GET")
+     * @Route("task/search/{title}", name="task.search", methods="GET")
      * 
      * @param Request $request
      * @param EntityManagerInterface $em
