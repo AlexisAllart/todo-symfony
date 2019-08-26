@@ -68,6 +68,7 @@ class TaskController extends AbstractController
         $task = $em->getRepository(Task::class)->findOneById($id);
         $em->remove($task);
         $em->flush();
+        return new Response('', Response::HTTP_OK);
     }
 
     /**
