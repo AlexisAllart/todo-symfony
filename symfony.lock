@@ -168,7 +168,11 @@
             "ref": "6c1ceb662f8997085f739cd089bfbef67f245983"
         },
         "files": [
+<<<<<<< HEAD
             "./config/packages/stof_doctrine_extensions.yaml"
+=======
+            "config/packages/stof_doctrine_extensions.yaml"
+>>>>>>> f2d93e073851ed4a44a480a04e63f64aaa413294
         ]
     },
     "swiftmailer/swiftmailer": {
