@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Colections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -296,5 +296,16 @@ class User
         $this->tasks->removeElement($task);
 
         return $this;
+    }
+
+
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }

@@ -6,6 +6,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
  * @ORM\Table(name="tasks")
@@ -26,7 +27,7 @@ class Task
     private $title;
 
     /**
-     * @ORM\Column(type = "string", length = 255)
+     * @ORM\Column(type = "string", length = 255, nullable=true)
      */
     private $description;
 
@@ -149,29 +150,45 @@ class Task
      * @ORM\ManyToOne(targetEntity="User", inversedBy="tasks")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    private $user;
+    private $user_id;
 
     /**
      * Get the value of user
      *
      * @return  User
      */ 
-    public function getUser()
+    public function getUserId()
     {
-        return $this->user;
+        return $this->user_id;
     }
 
     /**
      * Set the value of user
      *
-     * @param  User  $user
+     * @param  User  $user_id
      *
      * @return  self
      */ 
-    public function setUser(User $user) : self
+    public function setUserId(User $user_id) : self
     {
-        $this->user = $user;
+        $this->user_id = $user_id;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }
