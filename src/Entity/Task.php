@@ -6,6 +6,11 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
+ * @ORM\Table(name="tasks")
+ * @ORM\HasLifecycleCallbacks()
+ */
 class Task
 {
     /**
@@ -31,12 +36,12 @@ class Task
     private $status;
 
     /**
-     * @ORM\Column(type = "dateTime",)
+     * @ORM\Column(type = "dateTime")
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type = "dateTime",)
+     * @ORM\Column(type = "dateTime")
      */
     private $updatedAt;
 
@@ -138,7 +143,35 @@ class Task
         return $this;
     }
 
+    /**
+     * @var User
+     * 
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="tasks")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     */
+    private $user;
 
+    /**
+     * Get the value of user
+     *
+     * @return  User
+     */ 
+    public function getUser()
+    {
+        return $this->user;
+    }
 
+    /**
+     * Set the value of user
+     *
+     * @param  User  $user
+     *
+     * @return  self
+     */ 
+    public function setUser(User $user) : self
+    {
+        $this->user = $user;
 
+        return $this;
+    }
 }
