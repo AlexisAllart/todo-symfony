@@ -25,28 +25,28 @@ class User
     /**
      * @var string
      * 
-     * @ORM\Column(type=string, length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
      * @var string
      * 
-     * @ORM\Column(type=string, length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
      * @var string
      * 
-     * @ORM\Column(type=string, length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
      * @var string
      * 
-     * @ORM\Column(type=string, length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $password;
 
