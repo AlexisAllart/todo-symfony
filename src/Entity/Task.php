@@ -36,12 +36,12 @@ class Task
     private $status;
 
     /**
-     * @ORM\Column(type = "dateTime")
+     * @ORM\Column(type = "datetime")
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type = "dateTime")
+     * @ORM\Column(type = "datetime")
      */
     private $updatedAt;
 
