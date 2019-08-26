@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Task;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,9 +16,13 @@ class TaskController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $em
      */
-    public function create($params, Request $request, EntityManagerInterface $em)
+    public function create(Request $request, EntityManagerInterface $em)
     {
-// Deserialize $params etc...
+        $data = $request->getContent();
+        $task = $this->get('jms_serializer')->deserialize($data, Task::class, 'json');
+        $em->persist($task);
+        $em->flush();
+        return new Response('', Response::HTTP_CREATED);
     }
 
     /**
