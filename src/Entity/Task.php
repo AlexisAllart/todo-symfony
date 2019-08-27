@@ -108,39 +108,30 @@ class Task
     }
 
     /**
-     * @return mixed
+     * @ORM\PrePersist
      */
-    public function getCreatedAt()
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function getCreatedAt():?\DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @param mixed $createdAt
-     * @return Task
+     * @ORM\PreUpdate
      */
-    public function setCreatedAt($createdAt)
+    public function preUpdate()
     {
-        $this->createdAt = $createdAt;
-        return $this;
+        $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt():?\DateTime
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * @param mixed $updatedAt
-     * @return Task
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
     }
 
     /**
@@ -175,19 +166,5 @@ class Task
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist()
-     */
-    public function prePersist()
-    {
-        $this->createdAt = new \DateTime();
-    }
 
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime();
-    }
 }

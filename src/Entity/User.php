@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Colections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     /**
-     * @var int
+     *
      * 
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -23,50 +23,40 @@ class User
     private $id;
 
     /**
-     * @var string
+     *
      * 
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
-     * @var string
+     *
      * 
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
-     * @var string
+     *
      * 
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
     /**
-     * @var string
+     *
      * 
      * @ORM\Column(type="string", length=255)
      */
     private $password;
 
-    /**
-     * @var string
-     * 
-     * @ORM\Column(type="string", length=255)
-     */
-    private $role;
 
     /**
-     * @var \DateTime
-     * 
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
-     * 
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
@@ -83,182 +73,95 @@ class User
         $this->tasks = new ArrayCollection();
     }
 
-    /**
-     * Get the value of id
-     *
-     * @return  int
-     */ 
-    public function getId()
+
+    public function getId():?int
     {
         return $this->id;
     }
 
-    /**
-     * Get the value of lastName
-     *
-     * @return  string
-     */ 
-    public function getLastName()
+
+    public function getLastName():?string
     {
         return $this->lastName;
     }
 
-    /**
-     * Set the value of lastName
-     *
-     * @param  string  $lastName
-     *
-     * @return  self
-     */ 
-    public function setLastName(string $lastName)
+
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
 
         return $this;
     }
 
-    /**
-     * Get the value of firstName
-     *
-     * @return  string
-     */ 
-    public function getFirstName()
+
+    public function getFirstName():?string
     {
         return $this->firstName;
     }
 
-    /**
-     * Set the value of firstName
-     *
-     * @param  string  $firstName
-     *
-     * @return  self
-     */ 
-    public function setFirstName(string $firstName)
+
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
 
         return $this;
     }
 
-    /**
-     * Get the value of email
-     *
-     * @return  string
-     */ 
-    public function getEmail()
+
+    public function getEmail():?string
     {
         return $this->email;
     }
 
-    /**
-     * Set the value of email
-     *
-     * @param  string  $email
-     *
-     * @return  self
-     */ 
-    public function setEmail(string $email)
+
+    public function setEmail(string $email):self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * Get the value of password
-     *
-     * @return  string
-     */ 
-    public function getPassword()
+
+    public function getPassword():?string
     {
         return $this->password;
     }
 
-    /**
-     * Set the value of password
-     *
-     * @param  string  $password
-     *
-     * @return  self
-     */ 
-    public function setPassword(string $password)
+
+    public function setPassword(string $password):self
     {
         $this->password = $password;
 
         return $this;
     }
 
+
+
     /**
-     * Get the value of role
-     *
-     * @return  string
-     */ 
-    public function getRole()
+     * @ORM\PrePersist
+     */
+    public function prePersist()
     {
-        return $this->role;
+        $this->createdAt = new \DateTime();
+        $this->updatedAt= new \DateTime();
     }
 
-    /**
-     * Set the value of role
-     *
-     * @param  string  $role
-     *
-     * @return  self
-     */ 
-    public function setRole(string $role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of createdAt
-     *
-     * @return  \DateTime
-     */ 
-    public function getCreatedAt()
+    public function getCreatedAt():?\DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * Set the value of createdAt
-     *
-     * @param  \DateTime  $createdAt
-     *
-     * @return  self
-     */ 
-    public function setCreatedAt(\DateTime $createdAt)
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * Get the value of updatedAt
-     *
-     * @return  \DateTime
-     */ 
-    public function getUpdatedAt()
+    public function getUpdatedAt():?\DateTime
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * Set the value of updatedAt
-     *
-     * @param  \DateTime  $updatedAt
-     *
-     * @return  self
-     */ 
-    public function setUpdatedAt(\DateTime $updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
 
@@ -299,13 +202,4 @@ class User
     }
 
 
-    public function prePersist()
-    {
-        $this->createdAt = new \DateTime();
-    }
-
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime();
-    }
 }
