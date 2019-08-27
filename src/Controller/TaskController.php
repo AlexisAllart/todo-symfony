@@ -16,28 +16,40 @@ class TaskController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $em
      */
-    public function create(Request $request, EntityManagerInterface $em)
+    public function create($userid, Request $request, EntityManagerInterface $em)
     {
-        $data = $request->getContent();
-        $task = $this->get('jms_serializer')->deserialize($data, Task::class, 'json');
+        $task = new User;
+        $task->setTitle($request->request->get('title'));
+        $task->setDescription($request->request->get('description'));
+        $task->setStatus($request->request->get('status'));
+        $task->setUserId($userid);
         $em->persist($task);
         $em->flush();
-        return new Response('', Response::HTTP_CREATED);
+        return new Response('SUCCESS: New task "'.$task->getTitle().'" created', Response::HTTP_CREATED);
     }
 
     /**
-     * @Route("/task/list/{id}", name="task.list", methods="GET", requirements={"id" = "\d+"})
+     * @Route("/task/list", name="task.list", methods="GET")
      * 
      * @param Request $request
      * @param EntityManagerInterface $em
      */
-    public function list($user_id, EntityManagerInterface $em) : Response
+    public function list($userid, EntityManagerInterface $em) : Response
     {
         $taskList = $em->getRepository(Task::class)->findBy(
-            array('user_id'  => $user_id)
+            array('user_id'  => $userid)
         );
-        $data = $this->get('jms_serializer')->serialize($taskList, 'json');
-        $response = new Response($data);
+        $data=[];
+        foreach ($taskList as $task) {
+            array_push(json_encode($data,[
+                'id'            => $task->getId(),
+                'title'         => $task->getTitle(),
+                'description'   => $task->getDescription(),
+                'status'        => $task->getStatus(),
+                'user_id'       => $task->getUserId()
+            ]));
+        }
+        $response = new Response($data, Response::HTTP_OK);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
@@ -51,8 +63,14 @@ class TaskController extends AbstractController
     public function details($id, Request $request, EntityManagerInterface $em)
     {
         $task = $em->getRepository(Task::class)->findOneById($id);
-        $data = $this->get('jms_serializer')->serialize($task, 'json');
-        $response = new Response($data);
+        $data = [
+            'id'            => $task->getId(),
+            'title'         => $task->getTitle(),
+            'description'   => $task->getDescription(),
+            'status'        => $task->getStatus(),
+            'user_id'       => $task->getUserId()
+        ];
+        $response = new Response(json_encode($data), Response::HTTP_OK);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
@@ -68,23 +86,7 @@ class TaskController extends AbstractController
         $task = $em->getRepository(Task::class)->findOneById($id);
         $em->remove($task);
         $em->flush();
-        return new Response('', Response::HTTP_OK);
-    }
-
-    /**
-     * @Route("task/search/{title}", name="task.search", methods="GET")
-     * 
-     * @param Request $request
-     * @param EntityManagerInterface $em
-     */
-    public function search($title, Request $request, EntityManagerInterface $em)
-    {
-        $task = $em->getRepository(Task::class)->findOneBy(array(
-            'title' => $title
-        ));
-        $data = $this->get('serializer')->serialize($task, 'json');
-        $response = new Response($data);
+        $response = new Response('SUCCESS : "'.$task->getTitle.'" deleted', Response::HTTP_OK);
         $response->headers->set('Content-Type', 'application/json');
-        return $response;
     }
 }

@@ -24,12 +24,9 @@ class UserController extends AbstractController
         $user->setLastName($request->request->get('lastName'));
         $user->setEmail($request->request->get('email'));
         $user->setPassword(hash('sha256',$request->request->get('password')));
-        $user->setRole('User');
-        $user->setCreatedAt(new \DateTime);
-        $user->setUpdatedAt(new \DateTime);
         $em->persist($user);
         $em->flush();
-        return new Response('SUCCESS: New user '.$user->getFirstName().' '.$user->getLastName().' created', Response::HTTP_CREATED);
+        return new Response('SUCCESS: New user "'.$user->getFirstName().' '.$user->getLastName().'" created', Response::HTTP_CREATED);
     }
 
     /**
@@ -45,7 +42,6 @@ class UserController extends AbstractController
         $user->setLastName($request->request->get('lastName'));
         $user->setEmail($request->request->get('email'));
         $user->setPassword(hash('sha256',$request->request->get('password')));
-        // $user->setUpdatedAt(new \DateTime);
         $em->flush();
         return new Response('SUCCESS: User "'.$user->getFirstName().' '.$user->getLastName().'" edited', Response::HTTP_ACCEPTED);
     }
@@ -64,7 +60,18 @@ class UserController extends AbstractController
             &&
             $user->getEmail() == $request->request->get('email')
             ) {
-            $response = new Response(json_encode($user));
+            $data = [
+                'id'        => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName'  => $user->getLastName(),
+                'email'     => $user->getEmail()
+            ];
+            $response = new Response(json_encode($data), Response::HTTP_OK);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;            
+        }
+        else {
+            $response = new Response('ERROR: cannot find email/password', Response::HTTP_NOT_FOUND);
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
