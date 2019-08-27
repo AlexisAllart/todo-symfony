@@ -21,19 +21,19 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
 
-         $task = new Task();
-         $task->setUserId($manager->merge($this->getReference('user1')));
-         $task->setTitle('Créer les routes');
-         $task->setDescription('Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard.');
-         $task->setStatus('Fini');
-         $manager->persist($task);
+        $task = new Task();
+        $task->setUserId($manager->merge($this->getReference('user1')));
+        $task->setTitle('Créer les routes');
+        $task->setDescription('Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard.');
+        $task->setStatus('Fini');
+        $manager->persist($task);
 
         $task= new Task();
         $task->setUserId($manager->merge($this->getReference('user2')));
         $task->setTitle('Coder le front');
         $task->setDescription('Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard .');
         $task->setStatus('En cours');
-        $manager->persist($task2);
+        $manager->persist($task);
 
         $task= new Task();
         $task->setUserId($manager->merge($this->getReference('user3')));
