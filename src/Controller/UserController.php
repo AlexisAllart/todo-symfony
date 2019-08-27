@@ -47,19 +47,17 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/login/{id}"), name="user.login", methods="POST", requirements={"id" = "\d+"})
+     * @Route("/user/login"), name="user.login", methods="POST")
      * 
      * @param Request $request
      * @param EntityManagerInterface $em
      */
-    public function login($id, Request $request, EntityManagerInterface $em)
+    public function login(Request $request, EntityManagerInterface $em)
     {
-        $user = $em->getRepository(User::class)->findOneById($id);
-        if (
-            $user->getPassword() == hash('sha256',$request->request->get('password'))
-            &&
-            $user->getEmail() == $request->request->get('email')
-            ) {
+        $user = $em->getRepository(User::class)->findOneBy(
+            array('email'   => $request->request->get('email'))
+        );
+        if ($user->getPassword() == hash('sha256',$request->request->get('password'))) {
             $data = [
                 'id'        => $user->getId(),
                 'firstName' => $user->getFirstName(),
