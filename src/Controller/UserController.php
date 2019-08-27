@@ -19,11 +19,17 @@ class UserController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $em)
     {
-        $data = $request->getContent();
-        $user = $this->get('jms_serializer')->deserialize($data, User::class, 'json');
+        $user = new User;
+        $user->setFirstName($request->request->get('firstName'));
+        $user->setLastName($request->request->get('lastName'));
+        $user->setEmail($request->request->get('email'));
+        $user->setPassword(hash('sha256',$request->request->get('password')));
+        $user->setRole('User');
+        $user->setCreatedAt(new \DateTime);
+        $user->setUpdatedAt(new \DateTime);
         $em->persist($user);
         $em->flush();
-        return new Response('', Response::HTTP_CREATED);
+        return new Response('SUCCESS: New user '.$user->getFirstName().' '.$user->getLastName().' created', Response::HTTP_CREATED);
     }
 
     /**
@@ -34,16 +40,33 @@ class UserController extends AbstractController
      */
     public function edit($id, Request $request, EntityManagerInterface $em)
     {
-        $input = $request->getContent();
-        $data = $this->get('jms_serializer')->serialize($input, 'json');
         $user = $em->getRepository(User::class)->findOneById($id);
-        $user->setEmail($data->getEmail);
-        $user->setFirstName($data->getFirstName);
-        $user->setLastName($data->getLastName);
-        $user->setPassword($data->getPassword);
-        $user->setRole($data->getRole);
-        $user->setUpdatedAt(new \DateTime);
+        $user->setFirstName($request->request->get('firstName'));
+        $user->setLastName($request->request->get('lastName'));
+        $user->setEmail($request->request->get('email'));
+        $user->setPassword(hash('sha256',$request->request->get('password')));
+        // $user->setUpdatedAt(new \DateTime);
         $em->flush();
-        return new Response('', Response::HTTP_ACCEPTED);
+        return new Response('SUCCESS: User "'.$user->getFirstName().' '.$user->getLastName().'" edited', Response::HTTP_ACCEPTED);
+    }
+
+    /**
+     * @Route("/user/login/{id}"), name="user.login", methods="POST", requirements={"id" = "\d+"})
+     * 
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     */
+    public function login($id, Request $request, EntityManagerInterface $em)
+    {
+        $user = $em->getRepository(User::class)->findOneById($id);
+        if (
+            $user->getPassword() == hash('sha256',$request->request->get('password'))
+            &&
+            $user->getEmail() == $request->request->get('email')
+            ) {
+            $response = new Response(json_encode($user));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
     }
 }
